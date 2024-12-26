@@ -1,0 +1,32 @@
+.ticket {
+  display: flex;
+  flex-direction: column;
+  width: inherit;
+  height: 184px;
+  margin-top: 20px;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.1);
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 20px 0px 20px;
+  }
+
+  &__price {
+    font-family: Open Sans;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 24px;
+    text-align: left;
+    color: rgba(33, 150, 243, 1);
+  }
+}
+@media screen and (max-width: 468px) {
+  .ticket {
+    width: 100%;
+    height: auto;
+    margin-top: 15px;
+  }
+}

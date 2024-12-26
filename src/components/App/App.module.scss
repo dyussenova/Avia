@@ -1,0 +1,31 @@
+.app {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  font-family: 'Open Sans';
+}
+
+.conteiner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    width: 502px;
+    margin: 0 20px 0 20px;
+  }
+}
+body {
+  background-color: rgba(243, 247, 250, 1);
+  font-family: 'Open Sans';
+  font-size: 12px;
+  left: 0, 5px;
+}
+@media screen and (max-width: 468px) {
+  .conteiner__content {
+    width: 100%; /* Контент должен занимать всю ширину */
+    margin: 0 10px; /* Уменьшаем отступы с боков */
+  }
+}

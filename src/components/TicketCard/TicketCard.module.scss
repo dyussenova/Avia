@@ -1,0 +1,45 @@
+.card {
+  display: flex;
+  font-size: 12px;
+  text-transform: uppercase;
+
+  &__time,
+  &__road,
+  &__stop {
+    width: 140px;
+    height: 39px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  &__road {
+    text-transform: lowercase;
+  }
+}
+.city,
+.road,
+.trans {
+  font-family: Open Sans;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.5px;
+  text-align: left;
+  color: rgba(160, 176, 185, 1);
+  margin-bottom: -10px;
+}
+@media screen and (max-width: 468px) {
+  .card {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+
+  .trans,
+  .town,
+  .city,
+  .time {
+    font-size: 10px;
+    white-space: nowrap;
+  }
+}

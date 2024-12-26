@@ -1,0 +1,47 @@
+.ticketList {
+  display: flex;
+  flex-direction: column;
+  &__btn {
+    width: 502px;
+    height: 50px;
+    background: rgba(33, 150, 243, 1);
+    font-family: 'Open Sans';
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    margin-top: 20px;
+    border: none;
+    text-transform: uppercase;
+    border-radius: 5px;
+    color: #fff;
+
+    &:hover {
+      background-color: #39a3fa;
+      cursor: pointer;
+    }
+  }
+}
+.notFound {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid;
+  border-radius: 6px;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #84c6fc;
+  font-family: 'Open Sans';
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  text-transform: uppercase;
+  border: none;
+}
+@media screen and (max-width: 468px) {
+  .ticketList__btn {
+    width: 100%;
+    margin-top: 15px;
+  }
+}
