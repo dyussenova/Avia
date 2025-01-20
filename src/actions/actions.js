@@ -14,6 +14,7 @@ import {
   FAST,
   OPTIMAL,
 } from '../types/types'
+import { BASE_URL } from '../constants/constants'
 
 export const allTrans = () => {
   return { type: ALL_TRANS }
@@ -33,7 +34,7 @@ export const threeTrans = () => {
 }
 
 export const ticketsId = () => (dispatch) => {
-  fetch('https://aviasales-test-api.kata.academy/search')
+  fetch(`${BASE_URL}/search`)
     .then((response) => {
       if (!response.ok) {
         throw new Error('Network response was not ok')
@@ -52,66 +53,37 @@ export const ticketsId = () => (dispatch) => {
     })
 }
 
-export const ticketsLoad = (searchId) => (dispatch) => {
-  let attempts = 0
-  const maxAttempts = 3
+export const ticketsLoad = (searchId) => (dispatch, getState) => {
+  const { loadingMore } = getState().reducerTicket
 
-  const loadData = () => {
-    if (attempts >= maxAttempts) {
-      dispatch(errorOn('Превышено количество попыток загрузки данных.'))
+  if (loadingMore) return
+
+  dispatch(loaderON())
+  dispatch({ type: LOADER_ON, loadingMore: true })
+
+  fetch(`${BASE_URL}/tickets?searchId=${searchId}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Ошибка сервера с кодом: ${response.status}`)
+      }
+      return response.json()
+    })
+    .then((data) => {
+      if (data && Array.isArray(data.tickets) && data.tickets.length > 0) {
+        dispatch({
+          type: TICKETS_LOAD,
+          tickets: data.tickets,
+        })
+        dispatch(loaderOFF())
+      } else {
+        dispatch(errorOn('Не удалось загрузить билеты. Попробуйте позже.'))
+        dispatch(loaderOFF())
+      }
+    })
+    .catch((err) => {
+      dispatch(errorOn(`Ошибка: ${err.message}`))
       dispatch(loaderOFF())
-      return
-    }
-
-    attempts += 1
-    dispatch(loaderON())
-
-    const delay = Math.pow(2, attempts) * 1000
-
-    fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`)
-      .then((response) => {
-        if (!response.ok) {
-          console.error(`Ошибка от сервера: ${response.status}`)
-          throw new Error(`Ошибка сервера с кодом: ${response.status}`)
-        }
-        return response.json()
-      })
-      .then((data) => {
-        if (data && data.tickets) {
-          dispatch({
-            type: TICKETS_LOAD,
-            tickets: data.tickets,
-            stop: data.stop,
-          })
-
-          if (!data.stop) {
-            loadData()
-          } else {
-            dispatch(loaderOFF())
-          }
-        } else {
-          console.error('Данные не получены или пустые:', data)
-          dispatch(loaderOFF())
-        }
-      })
-      .catch((err) => {
-        console.error('Ошибка при загрузке данных:', err.message)
-
-        if (err.message.includes('500')) {
-          if (attempts < maxAttempts) {
-            setTimeout(loadData, delay)
-          } else {
-            dispatch(errorOn('Превышено количество попыток загрузки данных. Пожалуйста, попробуйте позже.'))
-            dispatch(loaderOFF())
-          }
-        } else {
-          dispatch(errorOn(`Ошибка: ${err.message}`))
-          dispatch(loaderOFF())
-        }
-      })
-  }
-
-  loadData()
+    })
 }
 
 export const loaderON = () => {

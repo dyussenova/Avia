@@ -1,22 +1,32 @@
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useState, useMemo } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
 import Ticket from '../Ticket/Ticket'
 import { filterTickets } from '../../utils/flTickets'
 import { sortTickets } from '../../utils/flSort'
 import Spinner from '../../spinner/spinner'
+import { ticketsLoad } from '../../actions/actions'
 
 import classes from './TicketList.module.scss'
 
 const TicketList = () => {
   const tickets = useSelector((state) => state.reducerTicket.tickets)
   const loading = useSelector((state) => state.reducerTicket.loading)
+  const loadingMore = useSelector((state) => state.reducerTicket.loadingMore)
   const filters = useSelector((state) => state.reducerFilter)
   const selectedTab = useSelector((state) => state.reducerTabs.selectedTab)
+  const searchId = useSelector((state) => state.reducerTicket.searchId)
+
+  const dispatch = useDispatch()
 
   const [visibleCount, setVisibleCount] = useState(5)
-  const filteredTickets = filterTickets(tickets, filters)
-  const sortedTickets = sortTickets(filteredTickets, selectedTab)
+  const filteredTickets = useMemo(() => filterTickets(tickets, filters), [tickets, filters])
+  const sortedTickets = useMemo(() => sortTickets(filteredTickets, selectedTab), [filteredTickets, selectedTab])
+
+  const loadMoreTickets = () => {
+    dispatch(ticketsLoad(searchId))
+    setVisibleCount((prev) => prev + 5)
+  }
 
   if (loading) {
     return <Spinner />
@@ -31,9 +41,9 @@ const TicketList = () => {
       {sortedTickets.slice(0, visibleCount).map((ticket) => (
         <Ticket key={`${ticket.price}-${ticket.carrier}`} {...ticket} />
       ))}
-
-      {visibleCount < sortedTickets.length && (
-        <button type="button" className={classes.ticketList__btn} onClick={() => setVisibleCount(visibleCount + 5)}>
+      {loadingMore && <Spinner />}
+      {visibleCount < sortedTickets.length && !loadingMore && (
+        <button type="button" className={classes.ticketList__btn} onClick={loadMoreTickets}>
           Показать еще 5 билетов!
         </button>
       )}

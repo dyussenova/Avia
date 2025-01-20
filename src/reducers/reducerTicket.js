@@ -5,6 +5,7 @@ const initialState = {
   searchId: null,
   error: null,
   loading: false,
+  loadingMore: false,
 }
 
 const reducerTicket = (state = initialState, action) => {
@@ -27,8 +28,9 @@ const reducerTicket = (state = initialState, action) => {
     case TICKETS_LOAD:
       return {
         ...state,
-        tickets: state.tickets.concat(action.tickets),
+        tickets: [...state.tickets, ...action.tickets],
         loading: false,
+        loadingMore: false,
       }
     case ERROR_ON:
       return {
