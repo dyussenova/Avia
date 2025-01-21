@@ -12,14 +12,16 @@
     "plugin:import/errors",
     "plugin:import/warnings"
   ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
     },
     "ecmaVersion": "latest",
-    "sourceType": "module"
+    "sourceType": "module",
+    "requireConfigFile": false
   },
-  "plugins": ["react", "prettier", "import"],
+  "plugins": ["react", "prettier", "import", "@typescript-eslint"],
   "rules": {
     "indent": ["error", 2, { "SwitchCase": 1 }],
     "prettier/prettier": "error",
@@ -36,7 +38,8 @@
         "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
         "newlines-between": "always"
       }
-    ]
+    ],
+    "@typescript-eslint/explicit-module-boundary-types": "off" // Добавьте любые другие правила TypeScript здесь
   },
   "settings": {
     "react": {
