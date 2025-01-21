@@ -17,7 +17,7 @@ const store = configureStore(
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({ immutableCheck: { warnAfter: 256 }, serializableCheck: { warnAfter: 256 } }).concat(thunk),
-    devTools: window.env.NODE_ENV !== 'production',
+    devTools: process.env.NODE_ENV !== 'production',
   },
   composeEnhancers()
 )
