@@ -61,29 +61,37 @@ export const ticketsLoad = (searchId) => (dispatch, getState) => {
   dispatch(loaderON())
   dispatch({ type: LOADER_ON, loadingMore: true })
 
-  fetch(`${BASE_URL}/tickets?searchId=${searchId}`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Ошибка сервера с кодом: ${response.status}`)
-      }
-      return response.json()
-    })
-    .then((data) => {
-      if (data && Array.isArray(data.tickets) && data.tickets.length > 0) {
-        dispatch({
-          type: TICKETS_LOAD,
-          tickets: data.tickets,
-        })
-        dispatch(loaderOFF())
-      } else {
-        dispatch(errorOn('Не удалось загрузить билеты. Попробуйте позже.'))
-        dispatch(loaderOFF())
-      }
-    })
-    .catch((err) => {
-      dispatch(errorOn(`Ошибка: ${err.message}`))
-      dispatch(loaderOFF())
-    })
+  const loadTickets = () => {
+    fetch(`${BASE_URL}/tickets?searchId=${searchId}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Ошибка сервера с кодом: ${response.status}`)
+        }
+        return response.json()
+      })
+      .then((data) => {
+        if (data && Array.isArray(data.tickets) && data.tickets.length > 0) {
+          dispatch({
+            type: TICKETS_LOAD,
+            tickets: data.tickets,
+          })
+          if (data.tickets.length === 0 || data.tickets.length < 5) {
+            dispatch(loaderOFF())
+          }
+        } else {
+          dispatch(loaderOFF())
+        }
+      })
+      .catch((err) => {
+        if (err.message.includes('500')) {
+          loadTickets()
+        } else {
+          dispatch(errorOn(`Ошибка: ${err.message}`))
+          dispatch(loaderOFF())
+        }
+      })
+  }
+  loadTickets()
 }
 
 export const loaderON = () => {

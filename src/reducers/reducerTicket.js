@@ -19,6 +19,7 @@ const reducerTicket = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+        loadingMore: false,
       }
     case TICKETS_ID:
       return {
@@ -37,6 +38,7 @@ const reducerTicket = (state = initialState, action) => {
         ...state,
         error: action.text,
         loading: false,
+        loadingMore: false,
       }
     case ERROR_OFF:
       return {

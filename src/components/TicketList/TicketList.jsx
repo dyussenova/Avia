@@ -28,7 +28,7 @@ const TicketList = () => {
     setVisibleCount((prev) => prev + 5)
   }
 
-  if (loading) {
+  if (loading && tickets.length === 0) {
     return <Spinner />
   }
 
@@ -41,7 +41,7 @@ const TicketList = () => {
       {sortedTickets.slice(0, visibleCount).map((ticket) => (
         <Ticket key={`${ticket.price}-${ticket.carrier}`} {...ticket} />
       ))}
-      {loadingMore && <Spinner />}
+      {loadingMore && tickets.length > 0 && <Spinner />}
       {visibleCount < sortedTickets.length && !loadingMore && (
         <button type="button" className={classes.ticketList__btn} onClick={loadMoreTickets}>
           Показать еще 5 билетов!
