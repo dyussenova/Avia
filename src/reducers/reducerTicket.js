@@ -6,6 +6,8 @@ const initialState = {
   error: null,
   loading: false,
   loadingMore: false,
+  stopLoading: false,
+  stop: false,
 }
 
 const reducerTicket = (state = initialState, action) => {
@@ -14,6 +16,7 @@ const reducerTicket = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
+        loadingMore: true,
       }
     case LOADER_OFF:
       return {
@@ -30,9 +33,9 @@ const reducerTicket = (state = initialState, action) => {
       return {
         ...state,
         tickets: [...state.tickets, ...action.tickets],
-        loading: false,
-        loadingMore: false,
+        stop: action.stop,
       }
+
     case ERROR_ON:
       return {
         ...state,

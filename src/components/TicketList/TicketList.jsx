@@ -33,11 +33,11 @@ const TicketList = () => {
 
   return (
     <div className={classes.ticketList}>
-      {sortedTickets.slice(0, visibleCount).map((ticket) => (
-        <Ticket key={`${ticket.price}-${ticket.carrier}`} {...ticket} />
+      {sortedTickets.slice(0, visibleCount).map((ticket, index) => (
+        <Ticket key={`${ticket.price}-${ticket.carrier}-${index}`} {...ticket} />
       ))}
-      {loadingMore && tickets.length > 0 && <Spinner />}
-      {visibleCount < sortedTickets.length && !loadingMore && (
+      {loadingMore && <Spinner />}
+      {visibleCount < sortedTickets.length && (
         <button type="button" className={classes.ticketList__btn} onClick={loadMoreTickets}>
           Показать еще 5 билетов!
         </button>

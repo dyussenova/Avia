@@ -54,9 +54,9 @@ export const ticketsId = () => (dispatch) => {
 }
 
 export const ticketsLoad = (searchId) => (dispatch, getState) => {
-  const { loadingMore } = getState().reducerTicket
+  const { loadingMore, stop } = getState().reducerTicket
 
-  if (loadingMore) return
+  if (loadingMore || stop) return
 
   dispatch(loaderON())
   dispatch({ type: LOADER_ON, loadingMore: true })
@@ -74,9 +74,10 @@ export const ticketsLoad = (searchId) => (dispatch, getState) => {
           dispatch({
             type: TICKETS_LOAD,
             tickets: data.tickets,
+            stop: data.stop,
           })
-          if (data.tickets.length === 0 || data.tickets.length < 5) {
-            dispatch(loaderOFF())
+          if (!data.stop) {
+            loadTickets()
           }
         } else {
           dispatch(loaderOFF())
